@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,10 +22,9 @@
         android:id="@+id/txtRNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/prompt_name"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:minHeight="48dp"
@@ -36,7 +34,6 @@
         android:id="@+id/txtREmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
@@ -49,7 +46,6 @@
         android:id="@+id/txtRContra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/prompt_password"
         android:inputType="textPassword"
@@ -62,13 +58,85 @@
         android:id="@+id/txtRreContra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/prompt_password_confirm"
         android:inputType="textPassword"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="45dp"
+        android:minHeight="48dp"
+        android:textColorHint="#757575"/>
+
+    <!-- Campos de dirección -->
+    <EditText
+        android:id="@+id/txtRShipName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nombre de envío"
+        android:inputType="text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:minHeight="48dp"
+        android:textColorHint="#757575"/>
+
+    <EditText
+        android:id="@+id/txtRShipAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Dirección de envío"
+        android:inputType="text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:minHeight="48dp"
+        android:textColorHint="#757575"/>
+
+    <EditText
+        android:id="@+id/txtRShipCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Ciudad de envío"
+        android:inputType="text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:minHeight="48dp"
+        android:textColorHint="#757575"/>
+
+    <EditText
+        android:id="@+id/txtRShipRegion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Región de envío"
+        android:inputType="text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:minHeight="48dp"
+        android:textColorHint="#757575"/>
+
+    <EditText
+        android:id="@+id/txtRShipPostalCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Código Postal de envío"
+        android:inputType="text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:minHeight="48dp"
+        android:textColorHint="#757575"/>
+
+    <EditText
+        android:id="@+id/txtRShipCountry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="País de envío"
+        android:inputType="text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:minHeight="48dp"
         android:textColorHint="#757575"/>
 
