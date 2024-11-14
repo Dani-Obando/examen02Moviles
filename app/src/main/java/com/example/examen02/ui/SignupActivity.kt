@@ -3,8 +3,6 @@ package com.example.examen02.ui
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.examen02.R
 import android.app.Activity
 import android.content.Context
@@ -12,10 +10,8 @@ import android.content.Intent
 import android.widget.EditText
 import android.widget.Button
 import android.widget.Toast
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
 import java.util.Date
 
 class SignupActivity : AppCompatActivity() {
@@ -41,10 +37,8 @@ class SignupActivity : AppCompatActivity() {
         btnRegistrarU.setOnClickListener {
             registrarUsuario()
         }
-
-
-
     }
+
     private fun registrarUsuario() {
         val nombre = txtRNombre.text.toString()
         val email = txtREmail.text.toString()
@@ -65,35 +59,74 @@ class SignupActivity : AppCompatActivity() {
                                 "email" to email,
                                 "ultAcceso" to dt.toString(),
                             )
-                            db.collection("datosUsuarios")
-                                .add(user)
-                                .addOnSuccessListener { documentReference ->
 
-                                    //Register the data into the local storage
-                                    val prefe = this.getSharedPreferences("appData", Context.MODE_PRIVATE)
+                            db.collection("Customers").limit(1).get()
+                                .addOnSuccessListener { customerSnapshot ->
+                                    val customerDocument = customerSnapshot.documents.firstOrNull()
+                                    if (customerDocument != null) {
+                                        val customerID = customerDocument.id
+                                        val contactName = customerDocument.getString("ContactName") ?: ""
+                                        val contactTitle = customerDocument.getString("ContactTitle") ?: ""
 
-                                    //Create editor object for write app data
-                                    val editor = prefe.edit()
+                                        val updatedCustomer: MutableMap<String, Any> = hashMapOf(
+                                            "ContactName" to nombre,
+                                            "ContactTitle" to nombre
+                                        )
 
-                                    //Set editor fields with the new values
-                                    editor.putString("email", email.toString())
-                                    editor.putString("contra", contra.toString())
+                                        db.collection("Customers").document(customerID).update(updatedCustomer)
+                                            .addOnSuccessListener {
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(this, "Error al actualizar el cliente", Toast.LENGTH_SHORT).show()
+                                            }
 
-                                    //Write app data
-                                    editor.commit()
+                                        user["CustomerID"] = customerID
 
-                                    Toast.makeText(this,"Usuario registrado correctamente",Toast.LENGTH_SHORT).show()
+                                        db.collection("datosUsuarios")
+                                            .add(user)
+                                            .addOnSuccessListener { documentReference ->
+                                                val shipData = hashMapOf(
+                                                    "ShipVia" to customerDocument.getString("ShipVia"),
+                                                    "ShipName" to customerDocument.getString("ShipName"),
+                                                    "ShipAddress" to customerDocument.getString("ShipAddress"),
+                                                    "ShipCity" to customerDocument.getString("ShipCity"),
+                                                    "ShipRegion" to customerDocument.getString("ShipRegion"),
+                                                    "ShipPostalCode" to customerDocument.getString("ShipPostalCode"),
+                                                    "ShipCountry" to customerDocument.getString("ShipCountry")
+                                                )
 
-                                    Intent().let {
-                                        setResult(Activity.RESULT_OK)
-                                        finish()
+                                                val prefe = this.getSharedPreferences("appData", Context.MODE_PRIVATE)
+                                                val editor = prefe.edit()
+
+                                                editor.putString("email", email)
+                                                editor.putString("contra", contra)
+                                                editor.putString("CustomerID", customerID)
+
+                                                shipData.forEach { (key, value) ->
+                                                    editor.putString(key, value)
+                                                }
+
+                                                editor.commit()
+
+                                                Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
+
+                                                Intent().let {
+                                                    setResult(Activity.RESULT_OK)
+                                                    finish()
+                                                }
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(this, "Error al registrar usuario", Toast.LENGTH_SHORT).show()
+                                            }
+                                    } else {
+                                        Toast.makeText(this, "No se encontró un cliente para vincular.", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                                 .addOnFailureListener { e ->
-                                    Toast.makeText(this,"Error al registrar usuario",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, "Error al obtener cliente para vincular", Toast.LENGTH_SHORT).show()
                                 }
                         } else {
-                            Toast.makeText(this,"Error al registrar usuario",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Error al registrar usuario", Toast.LENGTH_SHORT).show()
                         }
                     }
             } else {
