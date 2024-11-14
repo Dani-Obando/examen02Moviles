@@ -9,7 +9,8 @@ import android.widget.Toast
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -26,17 +27,18 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var txtEmail: EditText
     private lateinit var txtContra: EditText
     private lateinit var txtRegister: TextView
+    private lateinit var progressBar: ProgressBar
     private var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        enableEdgeToEdge()
 
         btnAutenticar = findViewById(R.id.btnAutenticar)
         txtEmail = findViewById(R.id.txtEmail)
         txtContra = findViewById(R.id.txtContra)
         txtRegister = findViewById(R.id.txtRegister)
+        progressBar = findViewById(R.id.progressBar)  // Asegúrate de que el ProgressBar esté en el layout
 
         txtRegister.setOnClickListener {
             goToSignup()
@@ -44,8 +46,10 @@ class LoginActivity : AppCompatActivity() {
 
         btnAutenticar.setOnClickListener {
             if (txtEmail.text.isNotEmpty() && txtContra.text.isNotEmpty()) {
+                showLoading(true)  // Mostrar carga
                 auth.signInWithEmailAndPassword(txtEmail.text.toString(), txtContra.text.toString())
                     .addOnCompleteListener {
+                        showLoading(false)  // Ocultar carga
                         if (it.isSuccessful) {
                             val dt: Date = Date()
                             val user = hashMapOf("ultAcceso" to dt.toString())
@@ -101,5 +105,9 @@ class LoginActivity : AppCompatActivity() {
             .setMessage(mssg)
             .setPositiveButton("Aceptar", null)
             .show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
